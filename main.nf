@@ -35,3 +35,8 @@ params.blast_penalty      = false  // -1
 params.blast_gapopen      = false  // 1
 params.blast_gapextend    = false  // 2
 params.blast_percidentity = false  // 80
+// Check if input path was provided
+if (params.input == false) {
+  println( "Please provide the input file with sequences in FASTA format with `--input` parameter.")
+  exit(1)
+}
