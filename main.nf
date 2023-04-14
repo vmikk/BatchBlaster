@@ -43,3 +43,61 @@ if (params.input == false) {
   println( "Please provide the input file with sequences in FASTA format with `--input` parameter.")
   exit(1)
 }
+
+// Taxonomy annotation
+// use globally-dereplicated sequences
+process blast {
+
+    label "main_container"
+
+    // publishDir "BLAST_results", mode: 'symlink'
+    // cpus 10
+
+    input:
+      path input
+      path taxdb_dir
+
+    output:
+      path "${input.getBaseName()}.m8.gz", emit: blastchunks
+
+    script:
+
+    // Optional parameters
+    wordsize  = params.blast_wordsize     ? "-word_size ${params.blast_wordsize}"         : ""
+    evalue    = params.blast_evalue       ? "-evalue    ${params.blast_evalue}"           : ""
+    reward    = params.blast_reward       ? "-reward    ${params.blast_reward}"           : ""
+    penalty   = params.blast_penalty      ? "-penalty   ${params.blast_penalty}"          : ""
+    gapopen   = params.blast_gapopen      ? "-gapopen   ${params.blast_gapopen}"          : ""
+    gapextend = params.blast_gapextend    ? "-gapextend ${params.blast_gapextend}"        : ""
+    gapextend = params.blast_percidentity ? "-perc_identity ${params.blast_percidentity}" : ""
+    
+    """
+    echo -e "Taxonomy annotation with BLAST\n"
+    echo -e "Input file: " ${input}
+    echo -e "Database  : " ${taxdb_dir}
+
+    blastn \
+      -task ${params.blast_task} \
+      -query ${input} \
+      -db ${taxdb_dir}/${bastdb_name} \
+      -strand both \
+      -outfmt=6 \
+      -max_target_seqs ${params.blast_maxts} \
+      -max_hsps ${params.blast_hsps} \
+      -out ${input.getBaseName()}.m8 \
+      -num_threads ${task.cpus} \
+      ${wordsize} \
+      ${evalue} \
+      ${reward} \
+      ${penalty} \
+      ${gapopen} \
+      ${gapextend} \
+      ${gapextend}
+
+    ## Compress results
+    gzip -7 ${input.getBaseName()}.m8
+
+    echo "..Done"
+
+    """
+}
