@@ -19,15 +19,18 @@ nextflow.enable.dsl = 2
 version = '0.1'
 
 // Input and output direcotries
-params.input = false
+params.input  = false
 params.outdir = "${launchDir}/results"
 
+params.method = "blast"                // other methods not implemented yet
+
 // Taxonomy annotation with BLAST
-params.blast_taxdb = false
-params.blast_task = "blastn"   // or "megablast"
-params.blast_chunksize = 4000
-params.blast_maxts = 10
-params.blast_hsps = 1
+params.blast_taxdb        = false
+params.blastdb_fasta      = false
+params.blast_task         = "blastn"   // or "megablast"
+params.blast_chunksize    = 4000
+params.blast_maxts        = 10
+params.blast_hsps         = 1
 params.blast_wordsize     = false  // 7
 params.blast_evalue       = false  // 0.001
 params.blast_reward       = false  // 1
