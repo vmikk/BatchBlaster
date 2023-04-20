@@ -101,3 +101,30 @@ process blast {
 
     """
 }
+
+
+// Aggregate BLAST results
+process blast_merge {
+
+    label "main_container"
+
+    publishDir "BLAST_results", mode: 'symlink'
+    // cpus 1
+
+    input:
+      path input
+
+    output:
+      path "Blast_hits.m8.gz", emit: m8
+
+    script:
+    """
+
+    echo -e "Aggregating BLAST hits\n"
+    
+    cat *.m8.gz > Blast_hits.m8.gz
+
+    echo "..Done"
+
+    """
+}
