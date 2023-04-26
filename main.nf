@@ -38,6 +38,12 @@ params.blast_penalty      = false  // -1
 params.blast_gapopen      = false  // 1
 params.blast_gapextend    = false  // 2
 params.blast_percidentity = false  // 80
+
+if(params.blast_taxdb){
+  bastdb_name = file(params.blast_taxdb).name
+  bastdb_dir = file(params.blast_taxdb).parent
+}
+
 // Check if input path was provided
 if (params.input == false) {
   println( "Please provide the input file with sequences in FASTA format with `--input` parameter.")
