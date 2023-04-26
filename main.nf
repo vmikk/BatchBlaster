@@ -134,3 +134,18 @@ process blast_merge {
 
     """
 }
+
+// Workflow
+workflow {
+
+  // Input file with sequences (FASTA)
+  ch_inp = Channel.fromPath(params.input)
+
+  // Split FASTA sequences into multiple chunks
+  ch_fasta = ch_inp.splitFasta(by: params.blast_chunksize, file:true)
+
+  // Run taxonomy annotation
+  blast(ch_fasta, bastdb_dir)
+
+}
+
