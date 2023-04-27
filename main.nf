@@ -179,5 +179,8 @@ workflow {
   // Run taxonomy annotation
   blast(ch_fasta, bastdb_dir)
 
+  // Aggregate BLAST results
+  ch_blasthits = blast.out.blastchunks.collect()
+  blast_merge(ch_blasthits)
 }
 
