@@ -135,6 +135,38 @@ process blast_merge {
     """
 }
 
+// Parse BLAST results
+process parse_blast {
+
+    label "main_container"
+
+    input:
+      path m8
+      path fasta
+      path refdb
+
+    output:
+      path "Blast_hits_BestHits.xlsx", emit: Bxlsx
+      path "Blast_hits_wide.RData",    emit: Bwide
+      path "Blast_hits_long.RData",    emit: Blong
+
+    script:
+    """
+    echo -e "Parsing BLAST results\n"
+    
+    parse_blast_results.R \
+      --m8           ${m8} \
+      --fasta        ${fasta} \
+      --db           ${refdb} \
+      --outputprefix Blast_hits \
+      --threads      ${task.cpus}
+
+    echo "..Done"
+    """
+}
+
+
+
 // Workflow
 workflow {
 
