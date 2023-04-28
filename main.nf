@@ -182,5 +182,14 @@ workflow {
   // Aggregate BLAST results
   ch_blasthits = blast.out.blastchunks.collect()
   blast_merge(ch_blasthits)
+
+  // Parse BLAST results
+  ch_blastdbfasta = Channel.fromPath(params.blastdb_fasta)
+  parse_blast(
+    blast_merge.out.m8,
+    ch_inp,
+    ch_blastdbfasta)
+
+}
 }
 
