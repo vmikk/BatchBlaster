@@ -99,3 +99,20 @@ BLASTS_10h[ , QueryName := tstrsplit(QueryName, ";", keep=1) ]
   BW <- blast_to_wide(BLASTS_10h, max_hits = 10,
     taxonomy = c("Kingdom", "Phylum", "Class", "Order", "Family", "Genus", "Species", "Function", "LT_comment", "SH"),
     seqs = seqs, refs = db_refs)
+
+
+## Add missing sequences (no BLAST info)
+if(any(!names(seqs) %in% BW$QueryName)){
+  cat("WARNING: some sequences do not have BLAST annotations\n")
+
+  ## Add missing sequences
+  SEQS_TAB <- data.table(
+    QueryName = names(seqs),
+    Seq = as.character(seqs))
+
+  SEQS_TAB <- SEQS_TAB[ ! QueryName %in% BW$QueryName ]
+
+  cat("..", nrow(SEQS_TAB), " sequences without BLAST hit were added to the wide table\n")
+  BW <- rbind(BW, SEQS_TAB, fill = TRUE)
+}
+
