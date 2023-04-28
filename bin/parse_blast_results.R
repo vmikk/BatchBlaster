@@ -116,3 +116,12 @@ if(any(!names(seqs) %in% BW$QueryName)){
   BW <- rbind(BW, SEQS_TAB, fill = TRUE)
 }
 
+
+# Remove redundant seqs
+if(length(unique(BW$QueryName)) != nrow(BW)){
+  cat("WARNING: there are some duplicated query sequences (based on ID); they will be removed\n")
+  BW <- unique(BW, by = "QueryName")
+}
+
+
+
