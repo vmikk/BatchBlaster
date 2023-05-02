@@ -99,6 +99,10 @@ if(length(names(seqs)) != length(unique(names(seqs)))){
 cat("Loading BLAST database\n")
 db_refs <- DATABASE
 db_refs <- readDNAStringSet(db_refs, format="fasta")
+if(SPLITTAX == TRUE){
+  names(db_refs) <- do.call(rbind, strsplit(x = names(db_refs), split = ";"))[,1]
+}
+
 ## BLAST columns
 bcolz <- c(
   "QueryName", "TargetName",
