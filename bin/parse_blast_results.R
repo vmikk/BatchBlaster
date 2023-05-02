@@ -2,6 +2,15 @@
 
 ## Script to parse BLAST results
 
+## Usage:
+# ./parse_blast_results.R \
+#    --m8           Blast_hits.m8.gz \
+#    --fasta        tst.fa \
+#    --db           UNITE_9.6beta_reference.fasta.gz \
+#    --outputprefix Blast_hits \
+#    --threads      4
+
+
 ############################################## Parse input parameters
 
 ## Check time
