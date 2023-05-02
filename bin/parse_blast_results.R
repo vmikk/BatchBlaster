@@ -23,6 +23,21 @@ option_list <- list(
 )
 opt <- parse_args(OptionParser(option_list=option_list))
 
+
+## Validation of the required argiments
+if(is.na(opt$m8)){
+  cat("m8 is not specified.\n", file=stderr())
+  stop()
+}
+if(is.na(opt$fasta)){
+  cat("Input sequences are not provided.\n", file=stderr())
+  stop()
+}
+if(is.na(opt$db)){
+  cat("Sequence database not specified.\n", file=stderr())
+  stop()
+}
+
 ## Assign variables
 INPUT      <- opt$m8
 FASTA      <- opt$fasta
