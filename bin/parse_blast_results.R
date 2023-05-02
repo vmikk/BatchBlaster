@@ -67,6 +67,17 @@ cat(paste("Number of CPU threads to use: ",  CPUTHREADS, "\n", sep=""))
 
 cat("\n")
 
+
+
+############################################## Data for debuging
+
+# INPUT      <- "Blast_hits.m8.gz"
+# FASTA      <- "tst.fa"
+# DATABASE   <- "UNITE_9.6beta_reference.fasta.gz"
+# OUTPUT     <- "Blast_hits"
+# CPUTHREADS <- 4
+# SPLITTAX   <- TRUE
+
 ############################################## Load packages and data
 
 cat("Loading R packages...\n")
