@@ -85,6 +85,12 @@ seqs <- readDNAStringSet(seqs, format="fasta")
 seqs_names <- names(seqs)
 names(seqs) <- gsub(pattern = ";.*", replacement = "", x = names(seqs))
 
+## Check if input sequence names are unique
+if(length(names(seqs)) != length(unique(names(seqs)))){
+  cat("..WARNING: Input sequence names are not unique!\n")
+  cat("..Therefore, merging with taxonomic information could be incorrect.\n")
+}
+
 ## Load reference sequences
 cat("Loading BLAST database\n")
 db_refs <- DATABASE
