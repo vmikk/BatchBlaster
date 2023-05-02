@@ -146,3 +146,22 @@ if(length(unique(BW$QueryName)) != nrow(BW)){
 
 
 
+
+cat("Exporting RData\n")
+saveRDS(object = BW,
+  file = paste0(OUTPUT, "_wide.RData"),
+  compress = "xz")
+
+saveRDS(object = BLASTS_10h,
+  file = paste0(OUTPUT, "_long.RData"),
+  compress = "xz")
+
+
+cat("Exporting Excel table\n")
+write.xlsx(list(
+  "BLAST" = BW
+  ),
+  file = paste0(OUTPUT, "_BestHits.xlsx"),
+  colNames = TRUE)
+
+
