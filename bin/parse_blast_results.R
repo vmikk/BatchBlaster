@@ -18,6 +18,8 @@ option_list <- list(
   make_option(c("-f", "--fasta"), action="store", default=NA, type='character', help="Sequences that were BLASTed (FASTA)"),
   make_option(c("-d", "--db"),    action="store", default=NA, type='character', help="BLAST database (FASTA)"),
   
+  make_option(c("-s", "--splittax"), action="store", default=TRUE, type='character', help="Logical, split taxonomy string (default, TRUE"),
+
   make_option(c("-u", "--outputprefix"), action="store", default="Blast_hits", type='character', help="Output file prefix"),
   make_option(c("-t", "--threads"),      action="store", default=4L, type='integer', help="Number of CPU threads for arrow, default 4")
 )
@@ -42,6 +44,7 @@ if(is.na(opt$db)){
 INPUT      <- opt$m8
 FASTA      <- opt$fasta
 DATABASE   <- opt$db
+SPLITTAX   <- as.logical( opt$splittax )
 OUTPUT     <- opt$outputprefix
 CPUTHREADS <- as.numeric( opt$threads )
 
@@ -49,6 +52,7 @@ CPUTHREADS <- as.numeric( opt$threads )
 cat(paste("BLAST results (m8): ", INPUT,    "\n", sep=""))
 cat(paste("FASTA sequences: ",    FASTA,    "\n", sep=""))
 cat(paste("Database: ",           DATABASE, "\n", sep=""))
+cat(paste("Split tax info: ",     SPLITTAX, "\n", sep=""))
 cat(paste("Output prefix: ",                 OUTPUT,     "\n", sep=""))
 cat(paste("Number of CPU threads to use: ",  CPUTHREADS, "\n", sep=""))
 
@@ -108,6 +112,10 @@ BLASTS_10h <- read_m8(INPUT, blast_colz = bcolz, package = "data.table")
 ## Remove size annotations
 cat("Extracting query IDs\n")
 BLASTS_10h[ , QueryName := tstrsplit(QueryName, ";", keep=1) ]
+
+## Split tax by tax ranks
+if(SPLITTAX == TRUE){
+
   cat("Splitting taxonomy string\n")
   BLASTS_10h[, c("AccID", "Kingdom", "Phylum", "Class", "Order", "Family", "Genus", "Species", "Function", "LT_comment", "SH") := tstrsplit(TargetName, ";", keep=1:11) ]
 
@@ -120,6 +128,19 @@ BLASTS_10h[ , QueryName := tstrsplit(QueryName, ";", keep=1) ]
   BW <- blast_to_wide(BLASTS_10h, max_hits = 10,
     taxonomy = c("Kingdom", "Phylum", "Class", "Order", "Family", "Genus", "Species", "Function", "LT_comment", "SH"),
     seqs = seqs, refs = db_refs)
+
+} else {
+  ## Do not split taxonomy, keep target ID as-is
+
+  cat("Converting to wide format\n")
+  BW <- blast_to_wide(BLASTS_10h, max_hits = 10,
+    taxonomy = "TargetName",
+    seqs = seqs, refs = db_refs)
+
+}
+
+
+
 
 
 ## Add missing sequences (no BLAST info)
