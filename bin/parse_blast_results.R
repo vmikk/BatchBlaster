@@ -117,6 +117,7 @@ seqs <- FASTA
 seqs <- readDNAStringSet(seqs, format="fasta")
 seqs_names <- names(seqs)
 names(seqs) <- gsub(pattern = ";.*", replacement = "", x = names(seqs))
+cat("..Number of sequences detected: ", length(seqs), "\n")
 
 ## Check if input sequence names are unique
 if(length(names(seqs)) != length(unique(names(seqs)))){
@@ -128,6 +129,8 @@ if(length(names(seqs)) != length(unique(names(seqs)))){
 cat("Loading BLAST database\n")
 db_refs <- DATABASE
 db_refs <- readDNAStringSet(db_refs, format="fasta")
+cat("..Number of records in the database: ", length(db_refs), "\n")
+
 if(SPLITTAX == TRUE){
   ## Keep only Accession ID for sequences in the databse
   names(db_refs) <- do.call(rbind, strsplit(x = names(db_refs), split = ";"))[,1]
@@ -143,6 +146,8 @@ bcolz <- c(
 cat("Reading m8 file\n")
 BLASTS_10h <- read_m8(INPUT, blast_colz = bcolz, package = "data.table")
 
+cat("..Number of BLAST hits in total: ", nrow(BLASTS_10h), "\n")
+
 ## Remove size annotations
 cat("Extracting query IDs\n")
 BLASTS_10h[ , QueryName := tstrsplit(QueryName, ";", keep=1) ]
@@ -154,7 +159,7 @@ if(SPLITTAX == TRUE){
 
   ## Prepare a vector of column names from the database
   tcolz <- strsplit(x = TAXCOLS, split = ",")[[1]]
-  cat(".. ", length(tcolz), " database columns names are provided\n")  
+  cat(".. ", length(tcolz), " column names are provided for the database\n")  
 
   ## Split headers of the matches
   ## NB. extra columns (not specified with TAXCOLS) will be ignored
@@ -210,12 +215,14 @@ if(length(unique(BW$QueryName)) != nrow(BW)){
 
 
 
-
 cat("Exporting RData\n")
+
+cat("..Wide table\n")
 saveRDS(object = BW,
   file = paste0(OUTPUT, "_wide.RData"),
   compress = "xz")
 
+cat("..Long table\n")
 saveRDS(object = BLASTS_10h,
   file = paste0(OUTPUT, "_long.RData"),
   compress = "xz")
@@ -228,4 +235,17 @@ write.xlsx(list(
   file = paste0(OUTPUT, "_BestHits.xlsx"),
   colNames = TRUE)
 
+cat("All done!\n")
 
+##################### Session info
+
+## Check time
+end_time <- Sys.time()
+
+tmm <- as.numeric(difftime(end_time, start_time, units = "min"))
+cat("\nElapsed time: ", tmm, " minutes\n")
+
+cat("\n")
+cat("Session info:\n")
+sessionInfo()
+cat("\n")
