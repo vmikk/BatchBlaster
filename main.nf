@@ -158,6 +158,7 @@ process parse_blast {
       --m8           ${m8} \
       --fasta        ${fasta} \
       --db           ${refdb} \
+      --maxhits      ${params.blast_maxts} \
       --outputprefix Blast_hits \
       --threads      ${task.cpus}
 
