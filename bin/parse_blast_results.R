@@ -27,8 +27,9 @@ option_list <- list(
   make_option(c("-f", "--fasta"), action="store", default=NA, type='character', help="Sequences that were BLASTed (FASTA)"),
   make_option(c("-d", "--db"),    action="store", default=NA, type='character', help="BLAST database (FASTA)"),
   
-  make_option(c("-s", "--splittax"), action="store", default=TRUE, type='character', help="Logical, split taxonomy string (default, TRUE"),
   make_option(c("-w", "--maxhits"),    action="store", default=10, type='integer', help="Maximum number of BLAST hits to keep (default, 10)"),
+  make_option(c("-s", "--splittax"),   action="store", default=TRUE, type='logical', help="Logical, split taxonomy string (default, TRUE"),
+  make_option(c("-x", "--taxcolumns"), action="store", default="AccID,Kingdom,Phylum,Class,Order,Family,Genus,Species,Function,Dataset", type='character', help="Field names of the database (comma-separated)"),
 
   make_option(c("-u", "--outputprefix"), action="store", default="Blast_hits", type='character', help="Output file prefix"),
   make_option(c("-t", "--threads"),      action="store", default=4L, type='integer', help="Number of CPU threads for arrow, default 4")
@@ -56,6 +57,7 @@ FASTA      <- opt$fasta
 DATABASE   <- opt$db
 MAXHITS    <- as.integer( opt$maxhits )
 SPLITTAX   <- as.logical( opt$splittax )
+TAXCOLS    <- opt$taxcolumns
 OUTPUT     <- opt$outputprefix
 CPUTHREADS <- as.numeric( opt$threads )
 
@@ -65,6 +67,7 @@ cat(paste("FASTA sequences: ",    FASTA,    "\n", sep=""))
 cat(paste("Database: ",           DATABASE, "\n", sep=""))
 cat(paste("Max hits to keep: ",   MAXHITS,  "\n", sep=""))
 cat(paste("Split tax info: ",     SPLITTAX, "\n", sep=""))
+cat(paste("Tax database column names: ",     TAXCOLS,    "\n", sep=""))
 cat(paste("Output prefix: ",                 OUTPUT,     "\n", sep=""))
 cat(paste("Number of CPU threads to use: ",  CPUTHREADS, "\n", sep=""))
 
@@ -123,6 +126,7 @@ cat("Loading BLAST database\n")
 db_refs <- DATABASE
 db_refs <- readDNAStringSet(db_refs, format="fasta")
 if(SPLITTAX == TRUE){
+  ## Keep only Accession ID for sequences in the databse
   names(db_refs) <- do.call(rbind, strsplit(x = names(db_refs), split = ";"))[,1]
 }
 
@@ -144,16 +148,26 @@ BLASTS_10h[ , QueryName := tstrsplit(QueryName, ";", keep=1) ]
 if(SPLITTAX == TRUE){
 
   cat("Splitting taxonomy string\n")
-  BLASTS_10h[, c("AccID", "Kingdom", "Phylum", "Class", "Order", "Family", "Genus", "Species", "Function", "LT_comment", "SH") := tstrsplit(TargetName, ";", keep=1:11) ]
 
-  tcolz <- c("AccID", "Kingdom", "Phylum", "Class", "Order", "Family", "Genus", "Species", "Function", "LT_comment", "SH")
+  ## Prepare a vector of column names from the database
+  tcolz <- strsplit(x = TAXCOLS, split = ",")[[1]]
+  cat(".. ", length(tcolz), " database columns names are provided\n")  
+
+  ## Split headers of the matches
+  ## NB. extra columns (not specified with TAXCOLS) will be ignored
+  cat(".. Splitting databse matches\n")
+  BLASTS_10h[, eval(tcolz) := tstrsplit(TargetName, ";", keep=1:length(tcolz)) ]
+
+  ## Remove non-splited columns ("QueryName", "TargetName") 
   bcolz <- c(bcolz[-2], tcolz)
   BLASTS_10h <- BLASTS_10h[, ..bcolz]
 
   ## Convert to wide format
   cat("Converting to wide format\n")
-  BW <- blast_to_wide(BLASTS_10h, max_hits = 10,
-    taxonomy = c("Kingdom", "Phylum", "Class", "Order", "Family", "Genus", "Species", "Function", "LT_comment", "SH"),
+  BW <- blast_to_wide(
+    BLASTS_10h,
+    max_hits = MAXHITS,
+    taxonomy = tcolz[-1],          # all columns except `AccID`
     seqs = seqs, refs = db_refs)
 
 } else {
