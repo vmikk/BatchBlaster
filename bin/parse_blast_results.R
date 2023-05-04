@@ -28,6 +28,7 @@ option_list <- list(
   make_option(c("-d", "--db"),    action="store", default=NA, type='character', help="BLAST database (FASTA)"),
   
   make_option(c("-s", "--splittax"), action="store", default=TRUE, type='character', help="Logical, split taxonomy string (default, TRUE"),
+  make_option(c("-w", "--maxhits"),    action="store", default=10, type='integer', help="Maximum number of BLAST hits to keep (default, 10)"),
 
   make_option(c("-u", "--outputprefix"), action="store", default="Blast_hits", type='character', help="Output file prefix"),
   make_option(c("-t", "--threads"),      action="store", default=4L, type='integer', help="Number of CPU threads for arrow, default 4")
@@ -53,6 +54,7 @@ if(is.na(opt$db)){
 INPUT      <- opt$m8
 FASTA      <- opt$fasta
 DATABASE   <- opt$db
+MAXHITS    <- as.integer( opt$maxhits )
 SPLITTAX   <- as.logical( opt$splittax )
 OUTPUT     <- opt$outputprefix
 CPUTHREADS <- as.numeric( opt$threads )
@@ -61,6 +63,7 @@ CPUTHREADS <- as.numeric( opt$threads )
 cat(paste("BLAST results (m8): ", INPUT,    "\n", sep=""))
 cat(paste("FASTA sequences: ",    FASTA,    "\n", sep=""))
 cat(paste("Database: ",           DATABASE, "\n", sep=""))
+cat(paste("Max hits to keep: ",   MAXHITS,  "\n", sep=""))
 cat(paste("Split tax info: ",     SPLITTAX, "\n", sep=""))
 cat(paste("Output prefix: ",                 OUTPUT,     "\n", sep=""))
 cat(paste("Number of CPU threads to use: ",  CPUTHREADS, "\n", sep=""))
@@ -157,13 +160,12 @@ if(SPLITTAX == TRUE){
   ## Do not split taxonomy, keep target ID as-is
 
   cat("Converting to wide format\n")
-  BW <- blast_to_wide(BLASTS_10h, max_hits = 10,
+  BW <- blast_to_wide(BLASTS_10h,
+    max_hits = MAXHITS,
     taxonomy = "TargetName",
     seqs = seqs, refs = db_refs)
 
 }
-
-
 
 
 
