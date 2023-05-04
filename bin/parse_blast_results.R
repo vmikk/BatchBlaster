@@ -78,11 +78,14 @@ cat("\n")
 ############################################## Data for debuging
 
 # INPUT      <- "Blast_hits.m8.gz"
-# FASTA      <- "tst.fa"
-# DATABASE   <- "UNITE_9.6beta_reference.fasta.gz"
+# FASTA      <- "inp.fasta"
+# DATABASE   <- "UNITE_9.7_230310.fasta.gz"
 # OUTPUT     <- "Blast_hits"
 # CPUTHREADS <- 4
+# MAXHITS    <- 10
 # SPLITTAX   <- TRUE
+# TAXCOLS    <- "AccID,Kingdom,Phylum,Class,Order,Family,Genus,Species,Function,Dataset"
+
 
 ############################################## Load packages and data
 
