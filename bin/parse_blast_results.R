@@ -6,9 +6,18 @@
 # ./parse_blast_results.R \
 #    --m8           Blast_hits.m8.gz \
 #    --fasta        tst.fa \
-#    --db           UNITE_9.6beta_reference.fasta.gz \
+#    --db           UNITE_9.7.fasta.gz \
+#    --maxhits      10 \
 #    --outputprefix Blast_hits \
-#    --threads      4
+#    --threads      4 \
+#    --splittax     TRUE \
+#    --taxcolumns   "AccID,Kingdom,Phylum,Class,Order,Family,Genus,Species,Function,Dataset" \
+#    --exportexcel  TRUE
+
+## !NB. If `--splittax == TRUE`,
+##      `--taxcolumns` should be a comma-separated list
+##      with the first element "AccID" (accession ID)
+##      In the taxonomy database, headers should have SEMICOLON (;) as field separator!
 
 
 ############################################## Parse input parameters
