@@ -192,5 +192,12 @@ workflow {
     ch_blastdbfasta)
 
 }
+
+
+// On completion
+workflow.onComplete {
+    println "Pipeline completed at : $workflow.complete"
+    println "Duration              : ${workflow.duration}"
+    println "Execution status      : ${workflow.success ? 'All done!' : 'Failed' }"
 }
 
