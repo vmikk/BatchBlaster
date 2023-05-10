@@ -41,6 +41,7 @@ option_list <- list(
   make_option(c("-x", "--taxcolumns"), action="store", default="AccID,Kingdom,Phylum,Class,Order,Family,Genus,Species,Function,Dataset", type='character', help="Field names of the database (comma-separated)"),
 
   make_option(c("-u", "--outputprefix"), action="store", default="Blast_hits", type='character', help="Output file prefix"),
+  make_option(c("-e", "--exportexcel"),  action="store", default=TRUE, type='logical', help="Export results in XLSX format (could fail for large number of records)"), 
   make_option(c("-t", "--threads"),      action="store", default=4L, type='integer', help="Number of CPU threads for arrow, default 4")
 )
 opt <- parse_args(OptionParser(option_list=option_list))
@@ -68,6 +69,7 @@ MAXHITS    <- as.integer( opt$maxhits )
 SPLITTAX   <- as.logical( opt$splittax )
 TAXCOLS    <- opt$taxcolumns
 OUTPUT     <- opt$outputprefix
+EXPORTXLSX <- as.logical( opt$exportexcel )
 CPUTHREADS <- as.numeric( opt$threads )
 
 ## Log assigned variables
@@ -78,6 +80,8 @@ cat(paste("Max hits to keep: ",   MAXHITS,  "\n", sep=""))
 cat(paste("Split tax info: ",     SPLITTAX, "\n", sep=""))
 cat(paste("Tax database column names: ",     TAXCOLS,    "\n", sep=""))
 cat(paste("Output prefix: ",                 OUTPUT,     "\n", sep=""))
+cat(paste("Export Excel (xlsx) files: ",     EXPORTXLSX, "\n", sep=""))
+
 cat(paste("Number of CPU threads to use: ",  CPUTHREADS, "\n", sep=""))
 
 cat("\n")
@@ -109,7 +113,7 @@ load_pckg("data.table")
 load_pckg("plyr")
 load_pckg("metagMisc")
 load_pckg("Biostrings")
-load_pckg("openxlsx")
+if(EXPORTXLSX == TRUE){ load_pckg("openxlsx") }
 
 cat("\n")
 
@@ -236,13 +240,15 @@ saveRDS(object = BLASTS_10h,
   file = paste0(OUTPUT, "_long.RData"),
   compress = "xz")
 
+if(EXPORTXLSX == TRUE){ 
+  cat("Exporting Excel table\n")
+  write.xlsx(list(
+    "BLAST" = BW
+    ),
+    file = paste0(OUTPUT, "_BestHits.xlsx"),
+    colNames = TRUE)
+}
 
-cat("Exporting Excel table\n")
-write.xlsx(list(
-  "BLAST" = BW
-  ),
-  file = paste0(OUTPUT, "_BestHits.xlsx"),
-  colNames = TRUE)
 
 cat("All done!\n")
 
