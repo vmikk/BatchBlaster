@@ -175,7 +175,7 @@ workflow {
   ch_inp = Channel.fromPath(params.input)
 
   // Split FASTA sequences into multiple chunks
-  ch_fasta = ch_inp.splitFasta(by: params.blast_chunksize, file:true)
+  ch_fasta = ch_inp.splitFasta(by: params.blast_chunksize, file:true, compress:false)
 
   // Run taxonomy annotation
   blast(ch_fasta, bastdb_dir)
