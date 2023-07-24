@@ -27,12 +27,25 @@ The name 'BatchBlaster' originates from its robust capability to submit and proc
     ```bash
     nextflow run vmikk/BatchBlaster -r main --input 'path/to/your/input' ...
     ```
+
+## Parameters
+
+- `--input` : Path to the input file containing the sequences (Required)  
+- `--outdir` : Path to the output directory (Default: `./results`)  
+- `--blast_taxdb` : Path to the BLAST database  
+- ...
+
 ## Output
 
 The results will be saved in the specified output directory (`./results` by default). It includes:
 
 - BLAST search results in tabular format ([`m8` a.k.a. `-outfmt 6`](https://www.metagenomics.wiki/tools/blast/blastn-output-format-6))  
 - Summary report  
+
+## Dependencies
+
+- [Nextflow](https://www.nextflow.io/) (>=23.04.0)  
+- [Singularity](https://sylabs.io/singularity/) or [Docker](https://www.docker.com/)
 
 
 ## License
