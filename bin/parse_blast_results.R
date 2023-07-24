@@ -18,6 +18,8 @@
 ##      `--taxcolumns` should be a comma-separated list
 ##      with the first element "AccID" (accession ID)
 ##      In the taxonomy database, headers should have SEMICOLON (;) as field separator!
+## 
+## !NB. Export in Excel format works only if the table has < 200 000 rows
 
 
 ############################################## Parse input parameters
@@ -241,14 +243,31 @@ saveRDS(object = BLASTS_10h,
   file = paste0(OUTPUT, "_long.RData"),
   compress = "xz")
 
+
+## Export results in Excel format
 if(EXPORTXLSX == TRUE){ 
   cat("Exporting Excel table\n")
-  write.xlsx(list(
-    "BLAST" = BW
-    ),
-    file = paste0(OUTPUT, "_BestHits.xlsx"),
-    colNames = TRUE)
-}
+  cat("..There are ", nrow(BW), "rows in the table\n")
+
+  if(nrow(BW) < 200000){
+  
+    write.xlsx(list(
+      "BLAST" = BW
+      ),
+      file = paste0(OUTPUT, "_BestHits.xlsx"),
+      colNames = TRUE)
+  
+  } else {
+
+    cat("..The table is probably too large for Excel\n")
+    cat("..Therefore, writing data in tab-separated text file\n")
+
+    fwrite(x = BW,
+      file = paste0(OUTPUT, "_BestHits.txt.gz"),
+      sep = "\t", compress = "gzip")
+
+  }
+} # end of tabular export
 
 
 cat("All done!\n")
