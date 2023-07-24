@@ -48,6 +48,13 @@ The results will be saved in the specified output directory (`./results` by defa
 - [Singularity](https://sylabs.io/singularity/) or [Docker](https://www.docker.com/)
 
 
+## Future Plans
+
+- **Integration of additional sequence analysis methods** (e.g., MMSeqs2, SINTAX, etc.)  
+- **Inclusion of Lowest Common Ancestor (LCA) estimation**    
+
+We are excited to share these enhancements in our forthcoming updates, so stay tuned!
+
 ## License
 
 This project is licensed under the terms of the Apache-2.0 license.
