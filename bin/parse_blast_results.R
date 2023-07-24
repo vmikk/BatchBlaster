@@ -94,6 +94,7 @@ cat("\n")
 # FASTA      <- "inp.fasta"
 # DATABASE   <- "UNITE_9.7_230310.fasta.gz"
 # OUTPUT     <- "Blast_hits"
+# EXPORTXLSX <- TRUE
 # CPUTHREADS <- 4
 # MAXHITS    <- 10
 # SPLITTAX   <- TRUE
