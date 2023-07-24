@@ -15,6 +15,18 @@ The name 'BatchBlaster' originates from its robust capability to submit and proc
 - Scalable and reproducible analysis with Nextflow  
 - Multi-platform compatibility (Linux, MacOS, Windows)  
 
+## Quick Start
+
+1. Install [Nextflow](https://www.nextflow.io/docs/latest/getstarted.html)
+
+    ```bash
+    curl -s https://get.nextflow.io | bash
+    ```
+2. Run BatchBlaster
+
+    ```bash
+    nextflow run vmikk/BatchBlaster -r main --input 'path/to/your/input' ...
+    ```
 ## Output
 
 The results will be saved in the specified output directory (`./results` by default). It includes:
