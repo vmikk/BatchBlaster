@@ -1,6 +1,7 @@
 # BatchBlaster  <img src='assets/BatchBlaster_Logo.webp' align="right" height="200" />
 
 ![Version](https://img.shields.io/badge/version-0.0.1-blue)
+![Lifecycle](https://img.shields.io/badge/status-experimental-orange)
 ![License](https://img.shields.io/github/license/vmikk/BatchBlaster)
 
 BatchBlaster is a bioinformatics pipeline that employs BLAST (Basic Local Alignment Search Tool), an essential algorithm for comparing primary biological sequence information, to perform efficient and high-throughput taxonomic identification searches.  
