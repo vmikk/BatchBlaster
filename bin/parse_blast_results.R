@@ -233,15 +233,49 @@ if(length(unique(BW$QueryName)) != nrow(BW)){
 
 cat("Exporting RData\n")
 
-cat("..Wide table\n")
-saveRDS(object = BW,
-  file = paste0(OUTPUT, "_wide.RData"),
-  compress = "xz")
+## Test if pigz is available
+pigz <- Sys.which("pigz")
 
-cat("..Long table\n")
-saveRDS(object = BLASTS_10h,
-  file = paste0(OUTPUT, "_long.RData"),
-  compress = "xz")
+if(! pigz %in% ""){
+
+  cat("..Exporting with pigz [parallel gzip]")
+
+  ## Parallel save
+  saveRDS.gz <- function(object, file, threads = 2) {
+    con <- pipe(paste0("pigz -p", threads," > ",file),"wb")
+    saveRDS(object, file = con)
+    close(con)
+  }
+
+  cat("..Wide table\n")
+  saveRDS.gz(
+    object  = BW,
+    file    = paste0(OUTPUT, "_wide.RData"),
+    threads = CPUTHREADS)
+
+  cat("..Long table\n")
+  saveRDS.gz(
+    object  = BLASTS_10h,
+    file    = paste0(OUTPUT, "_long.RData"),
+    threads = CPUTHREADS)
+
+
+} else {
+
+  cat("..Wide table\n")
+  saveRDS(
+    object   = BW,
+    file     = paste0(OUTPUT, "_wide.RData"),
+    compress = "xz")
+
+  cat("..Long table\n")
+  saveRDS(
+    object   = BLASTS_10h,
+    file     = paste0(OUTPUT, "_long.RData"),
+    compress = "xz")
+
+} # end of RData export
+
 
 
 ## Export results in Excel format
