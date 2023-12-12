@@ -6,7 +6,7 @@
 
 BatchBlaster is a bioinformatics pipeline that employs BLAST (Basic Local Alignment Search Tool), an essential algorithm for comparing primary biological sequence information, to perform efficient and high-throughput taxonomic identification searches.  
 
-BatchBlaster is built using the Nextflow workflow management system, ensuring portability and reproducibility across multiple platforms.  
+BatchBlaster is built using the [Nextflow](https://www.nextflow.io/) workflow management system, ensuring portability and reproducibility across multiple platforms. The pipeline is primarily designed for use on High Performance Computing (HPC) clusters, including the capability to submit tasks to the SLURM job scheduling system.  
 
 The name 'BatchBlaster' originates from its robust capability to submit and process BLAST tasks in batches, optimizing for speed and performance in large-scale sequence analysis tasks.  
 
