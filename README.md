@@ -53,7 +53,10 @@ The results will be saved in the specified output directory (`./results`, by def
 ## Future Plans
 
 - **Integration of additional sequence analysis methods** (e.g., MMSeqs2, SINTAX, etc.)  
-- **Inclusion of Lowest Common Ancestor (LCA) estimation**    
+- **Inclusion of Lowest Common Ancestor (LCA) estimation**  
+- Implementation of domain-specific threshold filtering for taxonomic annotation (e.g., for fungal sequences)  
+- Adding advanced machine learning algorithms for more accurate taxonomic classification (e.g., deep learning models that have been trained on the [UNITE database](https://unite.ut.ee/index.php))  
+- Implementation of a hybrid annotation approach (e.g., integration of classification results from various methods to enhance accuracy and reliability of taxonomic identification)  
 
 We are excited to share these enhancements in our forthcoming updates, so stay tuned!
 
@@ -63,5 +66,6 @@ This project is licensed under the terms of the Apache-2.0 license.
 
 ---
 
-Please feel free to submit issues and pull requests, your contributions are welcome!
+Please feel free to submit [issues](https://github.com/vmikk/BatchBlaster/issues) 
+and [pull requests](https://github.com/vmikk/BatchBlaster/pulls), your contributions are welcome!
 
