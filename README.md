@@ -38,9 +38,10 @@ The name 'BatchBlaster' originates from its robust capability to submit and proc
 
 ## Output
 
-The results will be saved in the specified output directory (`./results` by default). It includes:
+The results will be saved in the specified output directory (`./results`, by default). Output includes:
 
 - BLAST search results in tabular format ([`m8` a.k.a. `-outfmt 6`](https://www.metagenomics.wiki/tools/blast/blastn-output-format-6))  
+- A table with best BLAST hits reshaped into wide format  
 - Summary report  
 
 ## Dependencies
