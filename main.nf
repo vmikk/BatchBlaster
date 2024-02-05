@@ -56,7 +56,7 @@ process blast {
 
     label "main_container"
 
-    // publishDir "BLAST_results", mode: 'symlink'
+    // publishDir params.outdir, mode: 'copy'
     // cpus 10
 
     input:
@@ -114,7 +114,7 @@ process blast_merge {
 
     label "main_container"
 
-    publishDir "BLAST_results", mode: 'symlink'
+    publishDir params.outdir, mode: 'copy'
     // cpus 1
 
     input:
@@ -139,6 +139,9 @@ process blast_merge {
 process parse_blast {
 
     label "main_container"
+
+    publishDir params.outdir, mode: 'copy'
+    // cpus 4
 
     input:
       path m8
