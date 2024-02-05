@@ -238,7 +238,7 @@ pigz <- Sys.which("pigz")
 
 if(! pigz %in% ""){
 
-  cat("..Exporting with pigz [parallel gzip]")
+  cat("..Exporting with pigz [parallel gzip]\n")
 
   ## Parallel save
   saveRDS.gz <- function(object, file, threads = 2) {
