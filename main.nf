@@ -49,6 +49,12 @@ if (params.input == false) {
   println( "Please provide the input file with sequences in FASTA format with `--input` parameter.")
   exit(1)
 }
+// Check if BLAST database was provided
+if(params.blast_taxdb == false && params.method == "blast") {
+  println( "Please provide the BLAST database with `--blast_taxdb` parameter.")
+  exit(1)
+}
+
 
 // Taxonomy annotation
 // use globally-dereplicated sequences
