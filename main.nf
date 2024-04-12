@@ -155,9 +155,10 @@ process parse_blast {
       path refdb
 
     output:
-      path "Blast_hits_BestHits.xlsx", emit: Bxlsx
-      path "Blast_hits_wide.RData",    emit: Bwide
-      path "Blast_hits_long.RData",    emit: Blong
+      path "Blast_hits_wide.RData",      emit: Bwide
+      path "Blast_hits_long.RData",      emit: Blong
+      path "Blast_hits_BestHits.xlsx",   emit: Bxlsx, optional: true
+      path "Blast_hits_BestHits.txt.gz", emit: Btsv,  optional: true
 
     script:
     """
