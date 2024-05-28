@@ -59,6 +59,53 @@ if(params.blast_taxdb == false && params.method == "blast") {
 }
 
 
+// Pipeline help message
+def helpMsg() {
+    log.info"""
+    =====================================================================
+    BatchBlaster ${version}
+    =====================================================================
+    
+    Pipeline Usage:
+    To run the pipeline, enter the following in the command line:
+        nextflow run vmikk/batchblaster -r "main" --input ... --outdir ...
+    
+    If running on HPC, adjust the max heap size of the Java VM and specify the profile:
+        export NXF_OPTS="-Xms500M -Xmx2G"
+        nextflow run vmikk/batchblaster -r "main" -profile cluster,singularity ...
+
+    Options:
+    REQUIRED:
+        --input               Input file with sequences (FASTA)
+        --outdir              The output directory where the results will be saved
+
+    OPTIONAL:
+        --blast_taxdb         BLAST database
+        --blast_task          Task to execute (`blastn` or `megablast`)
+        --blast_chunksize     Number of sequences per analysis chunk
+        --blast_maxts         Maximum number of aligned sequences to keep
+        --blast_hsps          Maximum number of HSPs per subject sequence to save for each query
+        --blast_wordsize      Word size for wordfinder algorithm
+        --blast_evalue        Expectation value (E) threshold for saving hits (default, 10)
+        --blast_reward        Reward for a nucleotide match
+        --blast_penalty       Penalty for a nucleotide mismatch
+        --blast_gapopen       Cost to open a gap
+        --blast_gapextend     Cost to extend a gap
+        --blast_percidentity  Percent identity
+        --blast_splittax      Split headers of database records into columns in the output (default, true). In the header, semicolon should be used as a separator
+        --blast_taxcolumns    Column names for header parts of the database records (parameter should be defined as a comma-separated list)
+
+    NEXTFLOW-SPECIFIC:
+        -qs                   Queue size (max number of processes that can be executed in parallel); e.g., 8
+        -resume               Resume the workflow if it was stopped by an error (execution will continue using the cached results)
+
+    """.stripIndent()
+}
+// Show help msg
+if (params.help){
+    helpMsg()
+    exit(0)
+}
 // Taxonomy annotation
 // use globally-dereplicated sequences
 process blast {
