@@ -169,6 +169,8 @@ process parse_blast {
       --fasta        ${fasta} \
       --db           ${refdb} \
       --maxhits      ${params.blast_maxts} \
+      --splittax     ${params.blast_splittax} \
+      --taxcolumns   ${params.blast_taxcolumns} \
       --outputprefix Blast_hits \
       --threads      ${task.cpus}
 
