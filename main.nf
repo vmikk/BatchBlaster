@@ -184,7 +184,9 @@ process blast_merge {
 
     echo -e "Aggregating BLAST hits\n"
     
-    cat *.m8.gz > Blast_hits.m8.gz
+    find . -mindepth 2 -maxdepth 2 -name "*.m8.gz" \
+      | parallel -j1 "cat {}" \
+      >> Blast_hits.m8.gz
 
     echo "..Done"
 
