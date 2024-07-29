@@ -174,7 +174,7 @@ process blast_merge {
     // cpus 1
 
     input:
-      path input
+      path(input, stageAs: "?/*")
 
     output:
       path "Blast_hits.m8.gz", emit: m8
