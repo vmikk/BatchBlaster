@@ -42,6 +42,9 @@ params.blast_percidentity = false  // 80
 // BLAST-parsing
 params.blast_splittax     = true
 params.blast_taxcolumns   = "AccID,Kingdom,Phylum,Class,Order,Family,Genus,Species,Function,Dataset"
+params.exportexcel        = true
+
+
 if(params.blast_taxdb){
   bastdb_name = file(params.blast_taxdb).name
   bastdb_dir = file(params.blast_taxdb).parent
