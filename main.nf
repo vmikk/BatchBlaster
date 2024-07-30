@@ -227,7 +227,8 @@ process parse_blast {
       --splittax     ${params.blast_splittax} \
       --taxcolumns   ${params.blast_taxcolumns} \
       --outputprefix Blast_hits \
-      --threads      ${task.cpus}
+      --threads      ${task.cpus} \
+      --exportexcel  ${params.exportexcel}
 
     echo "..Done"
     """
