@@ -109,6 +109,41 @@ if (params.help){
     helpMsg()
     exit(0)
 }
+
+
+// Print the parameters to the console and to the log
+log.info """
+    =======================================================================
+    BatchBlaster ${version}
+    =======================================================================
+    Input data path: ${params.input}
+    Output path:     ${params.outdir}
+    Method:          ${params.method}
+    Database:        ${params.blast_taxdb}
+    """
+    .stripIndent()
+
+// log.info """
+//         Pipeline info:
+//           Pipeline profile:       ${workflow.profile}
+//           Config file used:       ${workflow.configFiles}
+//           Container engine:       ${workflow.containerEngine}
+//         """
+//         .stripIndent()
+// 
+// log.info """
+//         Core Nextflow options:
+//           launchDir:              ${workflow.launchDir}
+//           workDir:                ${workflow.workDir}
+//           projectDir:             ${workflow.projectDir}
+//         """
+//         .stripIndent()
+// 
+// log.info "======================================================================="
+log.info "\n"
+
+
+
 // Taxonomy annotation
 // use globally-dereplicated sequences
 process blast {
